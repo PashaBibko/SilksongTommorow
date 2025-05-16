@@ -27,15 +27,31 @@ footer
     gap: 10px
 }
 
-.page
+@media (min-width: 1000px)
 {
-    background-color: #333333;
-    width: 60%;
+    .page
+    {
+        background-color: #333333;
+        width: 60%;
 
-    min-height: 100vh;
+        min-height: 100vh;
 
-    padding: 50px;
-    box-sizing: border-box;
+        padding: 50px;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 999px)
+{
+    .page
+    {
+        background-color: #333333;
+
+        min-height: 100vh;
+
+        padding: 25px;
+        box-sizing: border-box;
+    }
 }
 
 .top-div
