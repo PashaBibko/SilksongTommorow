@@ -9,13 +9,12 @@ numberMap.set(15  , "Amount of areas in Hollow knight");
 numberMap.set(6   , "The average amount of years a r/Silksong member has spent in a psych-hospital");
 numberMap.set(2   , "Number of games Team Cherry has released");
 numberMap.set(47  , "Number of charms in Hollow knight");
-numberMap.set(1000, "What I would rate Zote out of 10");
 numberMap.set(63  , "The amount of achievements in Hollow Knight");
 
 // Gets tommorows date //
 const today = new Date();
 const tommorow = new Date();
-tommorow.setDate(today.getDate() + 1);
+tommorow.setDate(today.getDate() + 2)
 
 // Formats the date and outputs it to the webpage //
 const formattedDate = tommorow.toLocaleDateString();
@@ -23,7 +22,8 @@ document.getElementById('date').textContent = formattedDate;
 
 // Gets the date shortend as a number //
 const day = tommorow.getDate().toString().padStart(2, '0');
-const month = tommorow.getMonth().toString().padStart(2, '0');
+const month = (tommorow.getMonth() + 1).toString().padStart(2, '0');
+console.log(month);
 const targetNum = Number(day + month);
 
 // The numbers that it is allowed to use //
@@ -76,7 +76,7 @@ worker.onmessage = function(e)
     {
         const num = Number(match);
         return numberMap.get(num) ?? match;
-    }) + " = tomorrows date";
+    }) + " = Tommorow";
 }
 
 worker.postMessage({ nums, targetNum });
