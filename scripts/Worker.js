@@ -76,7 +76,7 @@ function Helper(path, target, remaining)
 function FindExpression(nums, target)
 {
     const initial = nums.map(n => ({ value: n, expr: n.toString() }));
-    return Helper([], target, initial) || "Cannot find a reason why silksong will release tommorow.";
+    return Helper([], target, initial) || "Cannot find a reason why Silksong will release tommorow.";
 }
 
 onmessage = function(e)

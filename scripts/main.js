@@ -1,16 +1,16 @@
 // Imports functions in other files //]
-import { ExtactNumbers } from "./Extract.js";
+import { ExtractNumbers, FormatExpression } from "./Util.js";
 
 // The number map //
 const numberMap = new Map();
-numberMap.set(1331, " - u/E1331");
-numberMap.set(2025, " - Year that silksong (should) release");
-numberMap.set(15  , " - Ammount of areas in Hollow knight");
-numberMap.set(6   , " - The average ammount of years a r/Silksong member has spent in a pysch-hospital");
-numberMap.set(2   , " - Number of games Team Cherry has released");
-numberMap.set(47  , " - Number of charms in Hollow knight");
-numberMap.set(1000, " - What I would rate Zote out of 10");
-numberMap.set(63  , " - The ammount of achivements in Hollow Knight");
+numberMap.set(1331, "u/E1331");
+numberMap.set(2025, "Year that silksong (should) release");
+numberMap.set(15  , "Amount of areas in Hollow knight");
+numberMap.set(6   , "The average amount of years a r/Silksong member has spent in a psych-hospital");
+numberMap.set(2   , "Number of games Team Cherry has released");
+numberMap.set(47  , "Number of charms in Hollow knight");
+numberMap.set(1000, "What I would rate Zote out of 10");
+numberMap.set(63  , "The amount of achievements in Hollow Knight");
 
 // Gets tommorows date //
 const today = new Date();
@@ -24,7 +24,7 @@ document.getElementById('date').textContent = formattedDate;
 // Gets the date shortend as a number //
 const day = tommorow.getDate().toString().padStart(2, '0');
 const month = tommorow.getMonth().toString().padStart(2, '0');
-const targetNum = Number(day + month) + 11;
+const targetNum = Number(day + month);
 
 // The numbers that it is allowed to use //
 const nums = Array.from(numberMap.keys());
@@ -33,14 +33,20 @@ const nums = Array.from(numberMap.keys());
 const worker = new Worker('scripts/Worker.js');
 worker.onmessage = function(e)
 {
-    // Displays the simple operation to the webpage //
-    document.getElementById('math-proof').textContent = e.data + " = " + targetNum;
-
     // Extracts the numbers into their array //
-    const numbers = ExtactNumbers(e.data);
+    const numbers = ExtractNumbers(e.data);
+    if (numbers.length === 0)
+    {
+        document.getElementById('math-proof-text').textContent = e.data;
+        return;
+    }
+
+    // Displays the simple operation to the webpage //
+    document.getElementById('math-proof-text').textContent = "Tomorrow's date is " + day + "/" + month + " and: ";
+    document.getElementById('math-proof').textContent = FormatExpression(e.data) + " = " + targetNum;
 
     // Adds a list element to the 'math-div' //
-    const container = document.getElementById('math-div');
+    const container = document.getElementById('table-insert-point');
     const table = document.createElement('table');
     table.className = "num-table";
     container.appendChild(table);
@@ -58,12 +64,19 @@ worker.onmessage = function(e)
 
         // Stores why the number is relevant //
         const strCell = document.createElement("td");
-        strCell.textContent = numberMap.get(item);
+        strCell.textContent = " = " + numberMap.get(item);
         row.appendChild(strCell);
 
         // Adds the row to the table //
         table.appendChild(row);
     });
+
+    // Replace each number with it's map equivelant //
+    document.getElementById('math-explanation').textContent = "Which means: " + FormatExpression(e.data).replace(/\b\d+\b/g, (match) =>
+    {
+        const num = Number(match);
+        return numberMap.get(num) ?? match;
+    }) + " = tomorrows date";
 }
 
 worker.postMessage({ nums, targetNum });
