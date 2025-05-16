@@ -20,3 +20,9 @@ body
     text-align: left;
     margin-top: 10px;
 }
+
+.num-table
+{
+    border-collapse: collapse;
+    width: 100%;
+}
